@@ -1,0 +1,9 @@
+name: RobotAtout
+version: '${project.version}'
+main: fr.robotv2.robotatout.RobotAtout
+api-version: 1.19
+authors: [ Robotv2 ]
+softdepend:
+  - PlaceholderAPI
+  - WorldGuard
+  - WorldEdit

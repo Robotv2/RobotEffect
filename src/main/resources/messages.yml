@@ -1,0 +1,12 @@
+prefix: "&a&lEFFECT &8- "
+
+dont-exist: "&cThis effect doesn't exist."
+permission-required: "&cYou don't have the required permission."
+has-effect: "&cThis effect is already activated."
+limit-reached: "&cYou have reached your maximum perk limit. (%limit%)"
+
+add-effect: "&aYou have successfully activated the effect."
+remove-effect: "&aYou have just removed your effect."
+
+entered-disabled-region: "&cYour effects have been automatically disabled upon entering this area."
+disabled-region: "&cYou cannot activate this effect here."

@@ -1,0 +1,19 @@
+storage:
+  #Default mode is SQLlite, Mode Available: SQLlite, MySQL.
+  mode: SQLlite
+  mysql-credentials:
+    host: your-host
+    port: your-port
+    database: your-database
+    username: your-username
+    password: your-password
+    useSSL: false
+
+effects:
+  #Effect's id, can be whatever you want.
+  speed-atout:
+    #The potion effect, please refer to https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html to see a full list of types.
+    potion-effect: SPEED
+    level: 2
+    #The required permission in order to use, in this case, '/effect speed-atout'
+    permission: roboteffect.effect.speed-atout
