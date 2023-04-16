@@ -4,11 +4,14 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import fr.robotv2.roboteffect.util.PlayerEffectLimit;
 import fr.robotv2.roboteffect.worldguard.WorldGuardHandler;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import revxrsal.commands.annotation.AutoComplete;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.BukkitCommandActor;
+import revxrsal.commands.bukkit.annotation.CommandPermission;
 
 @Command({"roboteffect", "re", "effect"})
 public class EffectCommand {
@@ -17,6 +20,13 @@ public class EffectCommand {
 
     public EffectCommand(RobotEffect instance) {
         this.instance = instance;
+    }
+
+    @Subcommand("reload")
+    @CommandPermission("roboteffect.command.reload")
+    public void onReload(BukkitCommandActor actor) {
+        this.instance.onReload();
+        actor.reply(ChatColor.GREEN + "The plugin has been reloaded successfully.");
     }
 
     @Default
@@ -57,8 +67,13 @@ public class EffectCommand {
                 return;
             }
 
-            if(instance.getEffectManager().getActive(player).size() + 1 > PlayerEffectLimit.getLimit(player)) {
-                instance.sendMessagePath(player, "limit-reached");
+            final int limit = PlayerEffectLimit.getLimit(player);
+            if(instance.getEffectManager().getActive(player).size() + 1 > limit) {
+                instance.sendMessagePath(
+                        player,
+                        "limit-reached",
+                        message -> message.replace("%limit%", String.valueOf(limit))
+                );
                 return;
             }
 

@@ -2,6 +2,9 @@ package fr.robotv2.roboteffect;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import fr.robotv2.roboteffect.api.EffectActivateEvent;
+import fr.robotv2.roboteffect.api.EffectDeactivateEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -61,6 +64,8 @@ public class Effect {
             return;
         }
 
+        Bukkit.getServer().getPluginManager().callEvent(new EffectActivateEvent(player, this));
+
         player.addPotionEffect(this.getPotionEffect());
         players.put(this, player.getUniqueId());
     }
@@ -70,6 +75,8 @@ public class Effect {
         if(!Effect.hasEffect(player, this)) {
             return;
         }
+
+        Bukkit.getServer().getPluginManager().callEvent(new EffectDeactivateEvent(player, this));
 
         player.removePotionEffect(this.type);
         players.remove(this, player.getUniqueId());

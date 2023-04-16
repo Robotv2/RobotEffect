@@ -2,9 +2,11 @@ package fr.robotv2.roboteffect;
 
 import com.sk89q.worldguard.WorldGuard;
 import fr.robotv2.roboteffect.data.PlayerData;
+import fr.robotv2.roboteffect.listeners.EffectActivateListener;
 import fr.robotv2.roboteffect.listeners.PlayerConsumeListener;
 import fr.robotv2.roboteffect.listeners.PlayerJoinListener;
 import fr.robotv2.roboteffect.listeners.PlayerQuitListener;
+import fr.robotv2.roboteffect.util.StringPlaceholder;
 import fr.robotv2.roboteffect.worldguard.WorldGuardHandler;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -51,7 +53,7 @@ public final class RobotEffect extends JavaPlugin {
 
         this.database = new DatabaseManager(this);
         final DatabaseManager.DatabaseType type = getConfig().get("storage.mode") != null
-                ? DatabaseManager.DatabaseType.valueOf(getConfig().getString("storage.mode"))
+                ? DatabaseManager.DatabaseType.valueOf(getConfig().getString("storage.mode").toUpperCase())
                 : DatabaseManager.DatabaseType.SQLLITE; // Default storage mode
 
         try {
@@ -69,16 +71,17 @@ public final class RobotEffect extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerQuitListener(this), this);
         pm.registerEvents(new PlayerConsumeListener(this), this);
+        pm.registerEvents(new EffectActivateListener(this), this);
 
         //command
         commandHandler = BukkitCommandHandler.create(this);
-        commandHandler.register(new EffectCommand(this));
         commandHandler.registerValueResolver(Effect.class, context -> getEffectManager().fromId(context.pop()));
         commandHandler.getAutoCompleter().registerSuggestion("effects", this.effectManager.getRegisteredEffects()
                 .stream()
                 .map(Effect::getName)
                 .collect(Collectors.toSet())
         );
+        commandHandler.register(new EffectCommand(this));
 
         //messages
         final String filePath = "messages.yml";
@@ -112,6 +115,11 @@ public final class RobotEffect extends JavaPlugin {
     public void onReload() {
         this.reloadConfig();
         this.getEffectManager().registerEffects();
+        commandHandler.getAutoCompleter().registerSuggestion("effects", this.effectManager.getRegisteredEffects()
+                .stream()
+                .map(Effect::getName)
+                .collect(Collectors.toSet())
+        );
     }
 
     public EffectManager getEffectManager() {
@@ -126,13 +134,17 @@ public final class RobotEffect extends JavaPlugin {
         return this.messages;
     }
 
-    public void sendMessagePath(Player player, String path) {
+    public void sendMessagePath(Player player, String path, StringPlaceholder... placeholders) {
         final String prefix = ChatColor.translateAlternateColorCodes('&', getMessages().getString("prefix", "&8"));
-        final String message = ChatColor.translateAlternateColorCodes('&', getMessages().getString(path, "&8"));
+
+        String message = ChatColor.translateAlternateColorCodes('&', getMessages().getString(path, "&8"));
+        for(StringPlaceholder placeholder : placeholders) {
+           message = placeholder.apply(message);
+        }
+
         player.sendMessage(prefix.concat(message));
     }
 
-    @SneakyThrows
     public void save(Player player) {
         final PlayerData data = new PlayerData();
         final HashSet<String> effects = new HashSet<>();
@@ -144,6 +156,11 @@ public final class RobotEffect extends JavaPlugin {
         data.setUuid(player.getUniqueId());
         data.setEffects(effects);
 
-        getDatabase().getDao().createOrUpdate(data);
+        try {
+            getDatabase().getDao().createOrUpdate(data);
+        } catch (SQLException e) {
+            getLogger().severe("An error occurred while saving data for " + player.getName());
+            getLogger().severe("Error's message: " + e.getMessage());
+        }
     }
 }

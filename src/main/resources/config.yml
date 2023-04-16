@@ -15,5 +15,5 @@ effects:
     #The potion effect, please refer to https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html to see a full list of types.
     potion-effect: SPEED
     level: 2
-    #The required permission in order to use, in this case, '/effect speed-atout'
+    #The required permission in order to use this effect, in this case: '/effect speed-atout'
     permission: roboteffect.effect.speed-atout

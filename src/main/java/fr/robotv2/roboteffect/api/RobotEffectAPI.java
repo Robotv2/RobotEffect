@@ -1,5 +1,7 @@
-package fr.robotv2.roboteffect;
+package fr.robotv2.roboteffect.api;
 
+import fr.robotv2.roboteffect.Effect;
+import fr.robotv2.roboteffect.RobotEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -16,19 +18,23 @@ public class RobotEffectAPI {
     private final static RobotEffect INSTANCE = RobotEffect.getInstance();
 
     @UnmodifiableView
-    public static Collection<Effect> getRegistered() {
+    public static Collection<Effect> getRegisteredEffects() {
         return INSTANCE.getEffectManager().getRegisteredEffects();
     }
 
     @UnmodifiableView
-    public static Collection<Effect> getActive(Player player) {
+    public static Collection<Effect> getActiveEffects(Player player) {
         return INSTANCE.getEffectManager().getActive(player);
     }
 
     @Nullable
     @Contract("null -> null")
-    public static Effect fromId(@Nullable String id) {
+    public static Effect getEffectFromId(@Nullable String id) {
         return INSTANCE.getEffectManager().fromId(id);
+    }
+
+    public static boolean hasEffect(Player player, Effect effect) {
+        return Effect.hasEffect(player, effect);
     }
 
     @NotNull
