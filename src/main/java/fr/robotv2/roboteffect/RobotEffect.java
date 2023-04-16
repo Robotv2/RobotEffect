@@ -8,13 +8,13 @@ import fr.robotv2.roboteffect.listeners.PlayerJoinListener;
 import fr.robotv2.roboteffect.listeners.PlayerQuitListener;
 import fr.robotv2.roboteffect.util.StringPlaceholder;
 import fr.robotv2.roboteffect.worldguard.WorldGuardHandler;
-import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.entity.Player;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
 
 import java.io.File;
@@ -134,7 +134,7 @@ public final class RobotEffect extends JavaPlugin {
         return this.messages;
     }
 
-    public void sendMessagePath(Player player, String path, StringPlaceholder... placeholders) {
+    public void sendMessagePath(CommandSender sender, String path, StringPlaceholder... placeholders) {
         final String prefix = ChatColor.translateAlternateColorCodes('&', getMessages().getString("prefix", "&8"));
 
         String message = ChatColor.translateAlternateColorCodes('&', getMessages().getString(path, "&8"));
@@ -142,7 +142,7 @@ public final class RobotEffect extends JavaPlugin {
            message = placeholder.apply(message);
         }
 
-        player.sendMessage(prefix.concat(message));
+        sender.sendMessage(prefix.concat(message));
     }
 
     public void save(Player player) {

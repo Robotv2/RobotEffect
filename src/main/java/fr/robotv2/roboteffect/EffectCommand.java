@@ -5,11 +5,9 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import fr.robotv2.roboteffect.util.PlayerEffectLimit;
 import fr.robotv2.roboteffect.worldguard.WorldGuardHandler;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import revxrsal.commands.annotation.AutoComplete;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Default;
-import revxrsal.commands.annotation.Subcommand;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bukkit.BukkitCommandActor;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
 
@@ -29,9 +27,34 @@ public class EffectCommand {
         actor.reply(ChatColor.GREEN + "The plugin has been reloaded successfully.");
     }
 
+    public void onTargetOther(CommandSender sender, Player target, Effect effect) {
+
+
+        if(!sender.hasPermission("roboteffect.command.others")) {
+            instance.sendMessagePath(sender, "permission-required");
+            return;
+        }
+
+        if(effect == null) {
+            instance.sendMessagePath(sender, "dont-exist");
+            return;
+        }
+
+        if(Effect.hasEffect(target, effect)) {
+            effect.deactivatePlayer(target);
+        } else {
+            effect.activatePlayer(target);
+        }
+    }
+
     @Default
     @AutoComplete("@effects")
-    public void onEffect(BukkitCommandActor actor, Effect effect) {
+    public void onEffect(BukkitCommandActor actor, Effect effect, @Optional Player target) {
+
+        if(target != null) {
+            this.onTargetOther(actor.getSender(), target, effect);
+            return;
+        }
 
         final Player player = actor.requirePlayer();
 
@@ -68,6 +91,7 @@ public class EffectCommand {
             }
 
             final int limit = PlayerEffectLimit.getLimit(player);
+
             if(instance.getEffectManager().getActive(player).size() + 1 > limit) {
                 instance.sendMessagePath(
                         player,

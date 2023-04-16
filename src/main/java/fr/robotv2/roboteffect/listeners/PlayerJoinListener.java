@@ -3,10 +3,10 @@ package fr.robotv2.roboteffect.listeners;
 import fr.robotv2.roboteffect.RobotEffect;
 import fr.robotv2.roboteffect.data.PlayerData;
 import lombok.SneakyThrows;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
