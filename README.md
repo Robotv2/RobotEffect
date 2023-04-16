@@ -40,3 +40,25 @@ Returns true if the player has the specified effect active, otherwise returns fa
   Set<Player> players = RobotEffectAPI.getPlayersWith(effect);
 ```
 Returns a set of players who have the specified effect active.
+
+## The following events are also available:
+
+### 'EffectActivateEvent' - Called when an effect is applied to a player.
+
+```java
+@EventHandler
+public void onEffectActivation(EffectActivateEvent event) {
+    // Handle event
+}
+```
+
+### 'EffectDeactivateEvent' - Called when an effect is removed from a player.
+
+```java
+@EventHandler
+public void onEffectDeactivation(EffectDeactivateEvent event) {
+    // Handle event
+}
+```
+
+
