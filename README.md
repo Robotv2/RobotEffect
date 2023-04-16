@@ -1,19 +1,42 @@
 # RobotEffect
 
-API
-The RobotEffect plugin includes a comprehensive API for advanced customization and integration with other plugins. Here are some of the available methods and events:
+## API Reference
 
-Methods
-getRegisteredEffects(): Returns a collection of all currently registered effects.
-getActiveEffects(Player player): Returns a collection of all currently active effects for the specified player.
-getEffectFromId(String id): Returns the effect with the specified ID, or null if no effect is found.
-hasEffect(Player player, Effect effect): Returns true if the specified player currently has the given effect active.
-getPlayersWith(Effect effect): Returns a set of all players currently affected by the specified effect.
-Events
-The RobotEffect plugin provides two main events for advanced customization of gameplay:
+#### Get all Registered Effects.
 
-EffectActivateEvent: Fired when a player activates an effect.
-getEffect(): Returns the effect that was activated.
-EffectDeactivateEvent: Fired when a player deactivates an effect.
-getEffect(): Returns the effect that was deactivated.
-To access the API, simply import the relevant classes and methods into your plugin's code. Full documentation is provided within the plugin's Javadoc.
+```java
+  Collection<Effect> effects = RobotEffectAPI.getRegisteredEffects();
+```
+Returns an unmodifiable collection of registered effects.
+
+
+#### Get all active effects of player.
+
+```java
+  Collection<Effect> effects = RobotEffectAPI.getActiveEffects(player);
+```
+Returns an unmodifiable collection of active effects for a specified player.
+
+
+#### Get an effect from an id.
+
+```java
+  Effect effect = RobotEffectAPI.getEffectFromId("example-effect");
+```
+Returns the effect object with the given ID if it exists, otherwise returns null.
+
+
+#### Check if a player has an effect active.
+
+```java
+  boolean hasEffect = RobotEffectAPI.hasEffect(player, effect);
+```
+Returns true if the player has the specified effect active, otherwise returns false.
+
+
+#### Get all players with a certain effect activated.
+
+```java
+  Set<Player> players = RobotEffectAPI.getPlayersWith(effect);
+```
+Returns a set of players who have the specified effect active.
