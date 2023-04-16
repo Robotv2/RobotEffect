@@ -41,9 +41,9 @@ Returns true if the player has the specified effect active, otherwise returns fa
 ```
 Returns a set of players who have the specified effect active.
 
-## The following events are also available:
+### The following events are also available:
 
-### 'EffectActivateEvent' - Called when an effect is applied to a player.
+#### 'EffectActivateEvent' - Called when an effect is applied to a player.
 
 ```java
 @EventHandler
@@ -52,7 +52,7 @@ public void onEffectActivation(EffectActivateEvent event) {
 }
 ```
 
-### 'EffectDeactivateEvent' - Called when an effect is removed from a player.
+#### 'EffectDeactivateEvent' - Called when an effect is removed from a player.
 
 ```java
 @EventHandler
